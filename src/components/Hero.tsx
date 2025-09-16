@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Play, Calendar } from "lucide-react";
-import heroImage from "@/assets/hero-sara-diakite.jpg";
+import heroImage from "@/assets/hero-sara-official.jpg";
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);

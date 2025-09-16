@@ -1,5 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { Play, Pause, SkipBack, SkipForward, Volume2, X } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Song {
+  id: string;
+  title: string;
+  audio_url: string | null;
+}
 
 const StickyAudioPlayer = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -7,20 +14,27 @@ const StickyAudioPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
+  const [tracks, setTracks] = useState<Song[]>([]);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  const tracks = [
-    {
-      title: "Duba bɛ na la",
-      artist: "Sara Diakité",
-      audioUrl: "/files/duba_be_na_la.mp3"
-    },
-    {
-      title: "Yesu Kununa (Live)",
-      artist: "Sara Diakité",
-      audioUrl: "/files/yesu_kununa.mp3"
+  const fetchSongs = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('songs')
+        .select('id, title, audio_url')
+        .eq('is_featured', true)
+        .order('created_at', { ascending: true });
+
+      if (error) throw error;
+      setTracks(data || []);
+    } catch (error) {
+      console.error('Error fetching songs:', error);
     }
-  ];
+  };
+
+  useEffect(() => {
+    fetchSongs();
+  }, []);
 
   const togglePlay = () => {
     if (isPlaying) {
@@ -32,10 +46,11 @@ const StickyAudioPlayer = () => {
   };
 
   const nextTrack = () => {
+    if (tracks.length === 0) return;
     const next = (currentTrack + 1) % tracks.length;
     setCurrentTrack(next);
     if (audioRef.current) {
-      audioRef.current.src = tracks[next].audioUrl;
+      audioRef.current.src = tracks[next].audio_url || "";
       if (isPlaying) {
         audioRef.current.play();
       }
@@ -43,10 +58,11 @@ const StickyAudioPlayer = () => {
   };
 
   const prevTrack = () => {
+    if (tracks.length === 0) return;
     const prev = (currentTrack - 1 + tracks.length) % tracks.length;
     setCurrentTrack(prev);
     if (audioRef.current) {
-      audioRef.current.src = tracks[prev].audioUrl;
+      audioRef.current.src = tracks[prev].audio_url || "";
       if (isPlaying) {
         audioRef.current.play();
       }
@@ -93,7 +109,9 @@ const StickyAudioPlayer = () => {
     audio.addEventListener('ended', handleEnded);
 
     // Initialize with first track
-    audio.src = tracks[0].audioUrl;
+    if (tracks.length > 0) {
+      audio.src = tracks[0].audio_url || "";
+    }
 
     return () => {
       audio.removeEventListener('timeupdate', updateTime);
@@ -110,9 +128,9 @@ const StickyAudioPlayer = () => {
     return () => {
       window.removeEventListener('showAudioPlayer', handleShowPlayer);
     };
-  }, []);
+  }, [tracks]);
 
-  if (!isVisible) return null;
+  if (!isVisible || tracks.length === 0) return null;
 
   return (
     <div className="audio-player-sticky">
@@ -146,15 +164,15 @@ const StickyAudioPlayer = () => {
             </button>
           </div>
 
-          {/* Track info */}
+            {/* Track info */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-2">
               <div className="min-w-0">
                 <h4 className="text-sm font-semibold text-foreground truncate">
-                  {tracks[currentTrack].title}
+                  {tracks[currentTrack]?.title || "Aucune chanson"}
                 </h4>
                 <p className="text-xs text-foreground/60 truncate">
-                  {tracks[currentTrack].artist}
+                  Sara Diakité
                 </p>
               </div>
               

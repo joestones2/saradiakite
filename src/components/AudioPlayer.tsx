@@ -1,35 +1,48 @@
 import { useState, useRef, useEffect } from "react";
 import { Play, Pause, Download, ExternalLink, Volume2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Song {
+  id: string;
+  title: string;
+  description: string | null;
+  duration: string | null;
+  audio_url: string | null;
+  spotify_url: string | null;
+  download_url: string | null;
+}
 
 const AudioPlayer = () => {
-  const [currentTrack, setCurrentTrack] = useState<number | null>(null);
+  const [currentTrack, setCurrentTrack] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
+  const [tracks, setTracks] = useState<Song[]>([]);
+  const [loading, setLoading] = useState(true);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  const tracks = [
-    {
-      id: 1,
-      title: "Duba bɛ na la",
-      description: "Un hymne puissant de louange en bambara qui célèbre la grandeur divine",
-      duration: "4:32",
-      audioUrl: "/files/duba_be_na_la.mp3", // Placeholder URL
-      spotifyUrl: "https://open.spotify.com/track/example1",
-      downloadUrl: "/files/duba_be_na_la.mp3"
-    },
-    {
-      id: 2,
-      title: "Yesu Kununa (Live)",
-      description: "Performance live captivante qui transporte l'auditeur dans une atmosphère de recueillement",
-      duration: "5:18",
-      audioUrl: "/files/yesu_kununa.mp3", // Placeholder URL
-      spotifyUrl: "https://open.spotify.com/track/example2",
-      downloadUrl: "/files/yesu_kununa.mp3"
-    }
-  ];
+  const fetchSongs = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('songs')
+        .select('*')
+        .eq('is_featured', true)
+        .order('created_at', { ascending: true });
 
-  const togglePlay = (trackId: number) => {
+      if (error) throw error;
+      setTracks(data || []);
+    } catch (error) {
+      console.error('Error fetching songs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSongs();
+  }, []);
+
+  const togglePlay = (trackId: string) => {
     if (currentTrack === trackId && isPlaying) {
       audioRef.current?.pause();
       setIsPlaying(false);
@@ -37,7 +50,7 @@ const AudioPlayer = () => {
       if (currentTrack !== trackId) {
         setCurrentTrack(trackId);
         if (audioRef.current) {
-          audioRef.current.src = tracks.find(t => t.id === trackId)?.audioUrl || "";
+          audioRef.current.src = tracks.find(t => t.id === trackId)?.audio_url || "";
         }
       }
       audioRef.current?.play();
@@ -72,6 +85,17 @@ const AudioPlayer = () => {
       audio.removeEventListener('ended', handleEnded);
     };
   }, []);
+
+  if (loading) {
+    return (
+      <section id="audio" className="py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="section-heading text-center">Écouter</h2>
+          <div className="text-center text-foreground/60">Chargement des chansons...</div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="audio" className="py-20 px-6">
@@ -121,23 +145,27 @@ const AudioPlayer = () => {
                       <Volume2 className="w-4 h-4" />
                       {track.duration}
                     </span>
-                    <a 
-                      href={track.downloadUrl}
-                      download
-                      className="text-sm text-primary hover:text-accent transition-colors flex items-center gap-1"
-                    >
-                      <Download className="w-4 h-4" />
-                      Télécharger
-                    </a>
-                    <a 
-                      href={track.spotifyUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-primary hover:text-accent transition-colors flex items-center gap-1"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      Spotify
-                    </a>
+                    {track.download_url && (
+                      <a 
+                        href={track.download_url}
+                        download
+                        className="text-sm text-primary hover:text-accent transition-colors flex items-center gap-1"
+                      >
+                        <Download className="w-4 h-4" />
+                        Télécharger
+                      </a>
+                    )}
+                    {track.spotify_url && (
+                      <a 
+                        href={track.spotify_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-primary hover:text-accent transition-colors flex items-center gap-1"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        Spotify
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
