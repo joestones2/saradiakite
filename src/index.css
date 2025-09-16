@@ -2,39 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* Sara Diakité Portfolio Design System - Gospel Artiste
+Palette: Doré chaud & Bleu profond avec gradients sophistiqués
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Base Colors */
+    --background: 198 100% 12%;
+    --foreground: 40 55% 75%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Card & Surfaces */
+    --card: 198 80% 8%;
+    --card-foreground: 40 55% 75%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 198 80% 8%;
+    --popover-foreground: 40 55% 75%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Brand Colors - Gospel Elegance */
+    --primary: 40 78% 58%; /* Doré chaud #E89F3F */
+    --primary-foreground: 198 100% 12%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 198 85% 15%;
+    --secondary-foreground: 40 55% 75%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 198 50% 20%;
+    --muted-foreground: 40 25% 65%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 40 85% 65%; /* Doré lumineux */
+    --accent-foreground: 198 100% 12%;
 
+    /* Status Colors */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* UI Elements */
+    --border: 198 30% 25%;
+    --input: 198 50% 15%;
+    --ring: 40 78% 58%;
 
     --radius: 0.5rem;
 
@@ -100,6 +105,138 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+/* Sara Diakité Design Tokens - Advanced */
+@layer base {
+  :root {
+    /* Gospel-inspired Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(198 60% 8%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(40 78% 58%) 0%, hsl(40 85% 65%) 100%);
+    --gradient-divine: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(198 80% 6%) 100%);
+    
+    /* Shadows & Effects */
+    --shadow-divine: 0 20px 60px -20px hsl(40 78% 58% / 0.4);
+    --shadow-soft: 0 8px 32px -8px hsl(198 80% 8% / 0.8);
+    --glow-gold: 0 0 30px hsl(40 78% 58% / 0.3);
+    
+    /* Typography Scale */
+    --font-hero: clamp(2.5rem, 5vw, 4.5rem);
+    --font-heading: clamp(1.8rem, 3vw, 2.8rem);
+    --font-body: clamp(1rem, 1.2vw, 1.125rem);
+    
+    /* Animations & Transitions */
+    --transition-divine: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+}
+
+/* Gospel Portfolio Custom Classes */
+@layer components {
+  .hero-title {
+    @apply text-[var(--font-hero)] font-bold leading-none tracking-tight;
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(2px 2px 4px hsl(var(--background) / 0.5));
+  }
+  
+  .section-heading {
+    @apply text-[var(--font-heading)] font-semibold text-primary mb-8;
+    text-shadow: 0 2px 8px hsl(var(--background) / 0.8);
+  }
+  
+  .divine-card {
+    @apply bg-card/80 backdrop-blur-sm border border-border/50 rounded-xl p-6;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition-divine);
+  }
+  
+  .divine-card:hover {
+    @apply border-primary/30;
+    box-shadow: var(--shadow-divine), var(--shadow-soft);
+    transform: translateY(-4px);
+  }
+  
+  .btn-divine {
+    @apply relative px-8 py-4 rounded-full font-semibold text-primary-foreground overflow-hidden;
+    background: var(--gradient-gold);
+    box-shadow: var(--shadow-divine);
+    transition: var(--transition-divine);
+  }
+  
+  .btn-divine:before {
+    @apply absolute inset-0 rounded-full opacity-0 transition-opacity duration-300;
+    content: '';
+    background: linear-gradient(135deg, hsl(40 85% 70%) 0%, hsl(40 78% 50%) 100%);
+  }
+  
+  .btn-divine:hover:before {
+    @apply opacity-100;
+  }
+  
+  .btn-divine:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--glow-gold), var(--shadow-divine);
+  }
+  
+  .btn-outline-divine {
+    @apply px-6 py-3 rounded-full border-2 border-primary text-primary bg-transparent font-semibold;
+    transition: var(--transition-divine);
+  }
+  
+  .btn-outline-divine:hover {
+    @apply bg-primary text-primary-foreground;
+    box-shadow: var(--glow-gold);
+    transform: translateY(-2px);
+  }
+  
+  .ken-burns {
+    animation: kenBurns 20s ease-in-out infinite alternate;
+  }
+  
+  .fade-in-up {
+    animation: fadeInUp 1s ease-out forwards;
+  }
+  
+  .audio-player-sticky {
+    @apply fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-md border-t border-border/50;
+    box-shadow: 0 -8px 32px -8px hsl(var(--background) / 0.8);
+  }
+}
+
+/* Gospel Animations */
+@layer utilities {
+  @keyframes kenBurns {
+    0% { transform: scale(1) translateX(0); }
+    100% { transform: scale(1.1) translateX(-5px); }
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes goldPulse {
+    0%, 100% { 
+      box-shadow: 0 0 20px hsl(40 78% 58% / 0.3);
+    }
+    50% { 
+      box-shadow: 0 0 40px hsl(40 78% 58% / 0.6);
+    }
+  }
+  
+  .animate-gold-pulse {
+    animation: goldPulse 3s ease-in-out infinite;
   }
 }
