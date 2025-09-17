@@ -7,6 +7,7 @@ import VideoSection from "@/components/VideoSection";
 import EventsAndPresskit from "@/components/EventsAndPresskit";
 import Contact from "@/components/Contact";
 import StickyAudioPlayer from "@/components/StickyAudioPlayer";
+import ChatWidget from "@/components/ChatWidget";
 
 const Index = () => {
   return (
@@ -22,6 +23,7 @@ const Index = () => {
         <Contact />
       </main>
       <StickyAudioPlayer />
+      <ChatWidget />
       
       {/* Footer */}
       <footer className="py-8 px-6 border-t border-border/50 bg-card/20">

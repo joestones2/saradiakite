@@ -3,6 +3,9 @@ import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import gallery1 from "@/assets/gallery-1.jpg";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
+import gallery4 from "@/assets/gallery-4.jpg";
+import galleryInvoque from "@/assets/gallery-invoque-moi.jpg";
+import galleryYesu from "@/assets/gallery-yesu-album.jpg";
 
 const Gallery = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -26,6 +29,24 @@ const Gallery = () => {
       alt: "Sara Diakité lors d'un concert en plein air",
       caption: "Festival Gospel - Abidjan 2023",
       credit: "Photo: Festival Gospel CI"
+    },
+    {
+      src: gallery4,
+      alt: "Sara Diakité en performance live",
+      caption: "Concert live - 2024",
+      credit: "Photo: Official"
+    },
+    {
+      src: galleryInvoque,
+      alt: "Sara Diakité - Invoque Moi",
+      caption: "Nouveau clip - Invoque Moi",
+      credit: "Photo: Elim Communication"
+    },
+    {
+      src: galleryYesu,
+      alt: "Concert de dédicace - Album Yesu",
+      caption: "Concert de dédicace - Album Yesu",
+      credit: "Photo: Palais de la Culture"
     }
   ];
 
