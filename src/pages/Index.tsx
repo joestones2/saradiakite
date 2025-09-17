@@ -8,6 +8,7 @@ import EventsAndPresskit from "@/components/EventsAndPresskit";
 import Contact from "@/components/Contact";
 import StickyAudioPlayer from "@/components/StickyAudioPlayer";
 import ChatWidget from "@/components/ChatWidget";
+import QuickActions from "@/components/QuickActions";
 
 const Index = () => {
   return (
@@ -22,6 +23,7 @@ const Index = () => {
         <EventsAndPresskit />
         <Contact />
       </main>
+      <QuickActions />
       <StickyAudioPlayer />
       <ChatWidget />
       
