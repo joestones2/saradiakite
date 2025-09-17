@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Send, Phone, Mail, MessageCircle, MapPin, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import BookingWidget from "@/components/BookingWidget";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -141,6 +142,18 @@ const Contact = () => {
 
           {/* Informations de contact */}
           <div className="space-y-8">
+            {/* Réservation en ligne */}
+            <div className="divine-card bg-gradient-to-br from-primary/10 to-accent/10 border-primary/20">
+              <div className="text-center">
+                <h3 className="text-xl font-semibold text-primary mb-3 flex items-center justify-center gap-2">
+                  <MessageCircle className="w-5 h-5" />
+                  Réservation en Ligne
+                </h3>
+                <p className="text-foreground/70 mb-6">Réservez directement un créneau avec Sara</p>
+                <BookingWidget />
+              </div>
+            </div>
+
             <div className="divine-card">
               <h3 className="text-2xl font-semibold text-primary mb-6">Informations de Contact</h3>
               
